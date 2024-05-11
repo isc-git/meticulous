@@ -1,0 +1,16 @@
+[package]
+name = "meticulous"
+version = "0.1.0"
+edition = "2021"
+
+[package.metadata.docs.rs]
+all-features = true
+targets = ["aarch64-apple-darwin", "wasm32-unknown-unknown"]
+
+[dependencies]
+eframe = { version = "0.27.2", features = ["wgpu"] }
+#eframe = { version = "0.27.2", features = [] }
+log = "0.4.21"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen-futures = "0.4"
