@@ -73,29 +73,6 @@ impl ApplicationHandler for Application {
         tracing::info!("size: {size:?}");
         size.width = size.width.max(1);
         size.height = size.height.max(1);
-        tracing::info!("size: {size:?}");
-
-        #[cfg(target_arch = "wasm32")]
-        {
-            use winit::dpi::{LogicalSize, PhysicalSize};
-            use winit::platform::web::WindowExtWebSys;
-            let canvas = window.canvas().unwrap();
-            let (width, height) = (canvas.client_width(), canvas.client_height());
-            tracing::debug!("canvas width: {width:?}, height: {height:?}");
-
-            let factor = window.scale_factor();
-            tracing::debug!("window scale factor: {factor:?}");
-            let logical = LogicalSize { width, height };
-            tracing::debug!("logical size: {logical:?}");
-            let PhysicalSize { width, height }: PhysicalSize<u32> = logical.to_physical(factor);
-
-            canvas.set_width(width as u32);
-            canvas.set_height(height as u32);
-            size.width = width;
-            size.height = height;
-        }
-
-        tracing::debug!("size: {size:?}");
 
         let surface = self.gpu_instance.create_surface(window.clone()).unwrap();
         tracing::debug!("created surface");
@@ -176,22 +153,6 @@ impl ApplicationHandler for Application {
                     .as_ref()
                     .expect("valid config")
                     .configure(&self.gpu_device, conf);
-
-                //#[cfg(target_arch = "wasm32")]
-                //{
-                //    use winit::dpi::{LogicalSize, PhysicalSize};
-                //    use winit::platform::web::WindowExtWebSys;
-                //    let canvas = self.window.as_ref().unwrap().canvas().unwrap();
-                //    let (width, height) = (canvas.client_width(), canvas.client_height());
-
-                //    let factor = self.window.as_ref().unwrap().scale_factor();
-                //    let logical = LogicalSize { width, height };
-                //    let PhysicalSize { width, height }: PhysicalSize<u32> =
-                //        logical.to_physical(factor);
-
-                //    canvas.set_width(width as u32);
-                //    canvas.set_height(height as u32);
-                //}
 
                 if let Some(win) = self.window.as_ref() {
                     win.request_redraw();
